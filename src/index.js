@@ -1,5 +1,20 @@
+'use strict';
 import React from 'react';
 import { render } from 'react-dom';
-import { App } from './App';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import App from './App';
 
-render(<App />, document.getElementById('root'));
+let count=1;
+let reducers=function(state={message:'no message'},action){
+	count++;
+	return {message:'message_'+count};
+};
+let store=createStore(reducers);
+
+render(
+	<Provider store={store}>
+		<App />
+	</Provider>, 
+	document.getElementById('root')
+);

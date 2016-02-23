@@ -33,3 +33,8 @@ npm start
 
 再浏览器打开：http://localhost:3000/
 
+
+## 集成redux，最简单的使用
+
+
+
