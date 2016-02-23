@@ -1,6 +1,8 @@
 'use strict';
 import React, { Component,PropTypes } from 'react';
 import { connect } from 'react-redux';
+import NewsBar from './NewsBar';
+import NewsList from './NewsList';
 
 function refreshNewsList(){
   return {
@@ -8,41 +10,19 @@ function refreshNewsList(){
   };
 }
 
-class NewsBar extends Component{
-  render(){
-    console.log('===>render news bar');
-    return (
-      <div>新闻 <button onClick={ e =>{this.props.onRefrashClick()}}>刷新</button></div>
-    );
-  }
-}
-
-// NewsBar.propTypes={
-//   onRefrashClick: PropTypes.func.isRequired
-// }
-
-class NewsList extends Component{
-  render(){
-    console.log('>>>render news list: ');
-    return (
-      <div>新闻列表..{this.props.message}</div>
-    );
-  }
-}
-
 function select(state) {
   return {
-    message: state.message
+    news: state.news
   };
 }
 
 class App extends Component {
   render(){
-    const {dispatch,message}=this.props;
+    const {dispatch,news}=this.props;
     return (
         <div>
           <NewsBar onRefrashClick={()=>dispatch(refreshNewsList())} />
-          <NewsList message={message}/>
+          <NewsList news={news}/>
         </div>
     );
   }
