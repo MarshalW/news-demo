@@ -34,7 +34,21 @@ npm start
 再浏览器打开：http://localhost:3000/
 
 
-## 集成redux，最简单的使用
+## 集成redux，实现同步的新闻列表
+
+切换版本：
+
+```
+git checkout sync_news_list
+```
+
+然后：
+
+```
+npm start
+```
+
+再浏览器打开：http://localhost:3000/
 
 
 
