@@ -4,9 +4,19 @@ import { connect } from 'react-redux';
 import NewsBar from './NewsBar';
 import NewsList from './NewsList';
 
+export const RECEIVE_POSTS = 'RECEIVE_POSTS';
+
 function refreshNewsList(){
   return {
     type:'refreshNewsList'
+  };
+}
+
+function refreshNewsListAsync(){
+  return (dispatch,getState)=>{
+    return setTimeout(()=>{
+      dispatch(refreshNewsList());
+    },100);    
   };
 }
 
@@ -21,7 +31,7 @@ class App extends Component {
     const {dispatch,news}=this.props;
     return (
         <div>
-          <NewsBar onRefrashClick={()=>dispatch(refreshNewsList())} />
+          <NewsBar onRefrashClick={()=>dispatch(refreshNewsListAsync())} />
           <NewsList news={news}/>
         </div>
     );

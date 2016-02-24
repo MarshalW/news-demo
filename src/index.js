@@ -1,8 +1,10 @@
 'use strict';
 import React from 'react';
 import { render } from 'react-dom';
-import { createStore } from 'redux';
+import { createStore,applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
+import thunkMiddleware from 'redux-thunk';
+import request from 'superagent';
 import App from './App';
 
 const news=[
@@ -25,13 +27,18 @@ const news=[
 ];
 
 let reducers=function(state={news:[]},action){
-	if(action.type!='refreshNewsList'){
-		return state;
-	}else{
+	console.log('>>>reducers:'+action);
+	if(action.type=='refreshNewsList'){
 		return {news:news};	
+	}else{
+		return state;
 	}
 };
-let store=createStore(reducers);
+
+const createStoreWithMiddleware = applyMiddleware(
+  thunkMiddleware
+)(createStore);
+let store=createStoreWithMiddleware(reducers);
 
 render(
 	<Provider store={store}>
@@ -39,3 +46,11 @@ render(
 	</Provider>, 
 	document.getElementById('root')
 );
+
+request
+  .get('/news.json')
+  .set('Accept', 'application/json')
+  .end(function(err, res){
+    console.log('err: '+err);
+    console.log(res);
+  });
