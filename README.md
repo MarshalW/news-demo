@@ -50,5 +50,23 @@ npm start
 
 再浏览器打开：http://localhost:3000/
 
+## 实现异步的新闻列表
+
+新闻数据通过ajax获取（`news.json`)。为了模拟网络加载慢情况下loading效果，使用`Promise`做了一个延时。
+
+切换版本：
+
+```
+git checkout async_news_list
+```
+
+然后：
+
+```
+npm start
+```
+
+再浏览器打开：http://localhost:3000/
+
 
 
