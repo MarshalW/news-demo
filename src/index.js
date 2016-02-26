@@ -6,12 +6,14 @@ import { Provider } from 'react-redux';
 import thunkMiddleware from 'redux-thunk';
 import App from './App';
 
-let reducers=function(state={news:[]},action){
+let reducers=function(state={news:[],loading:false},action){
 	if(action.type=='refreshNewsList'){
-		return {news:action.state.news};	
-	}else{
-		return state;
+		return action.state;	
 	}
+	if(action.type=='loadingNewsList'){
+		return action.state;	
+	}
+	return state;
 };
 
 const createStoreWithMiddleware = applyMiddleware(

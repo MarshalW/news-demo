@@ -2,40 +2,68 @@
 import React, { Component,PropTypes } from 'react';
 import { connect } from 'react-redux';
 import request from 'superagent';
+import superagentPromisePlugin from 'superagent-promise-plugin';
 import NewsBar from './NewsBar';
 import NewsList from './NewsList';
 
-function refreshNewsList(news){
+function refreshNewsList(state){
   return {
     type:'refreshNewsList',
-    state:news
+    state:state
+  };
+}
+
+function loadingNewsList(state){
+  return {
+    type:'loadingNewsList',
+    state:state
   };
 }
 
 function refreshNewsListAsync(){
   return (dispatch,getState)=>{
-    return request
-      .get('/news.json')
-      .set('Accept', 'application/json')
-      .end(function(err, res){
-        let news=JSON.parse(res.text);
-        dispatch(refreshNewsList(news));
-    });    
+    let state=getState();
+    dispatch(loadingNewsList(Object.assign({}, state, {
+      loading:true,
+      news:[]
+    })));
+
+    let delay=new Promise((resolve,reject)=>{
+      setTimeout(()=>{
+        resolve();
+      },1000);
+    });
+
+    return delay.then(()=>{
+      request
+        .get('/news.json')
+        .use(superagentPromisePlugin)
+        .set('Accept', 'application/json')  
+        .end()
+        .then(function (res) {
+           let result=JSON.parse(res.text);
+           let newState=Object.assign({}, state, {
+              news: result.news
+           });
+           dispatch(refreshNewsList(newState));
+        })   
+    });
   };
 }
 
 function select(state) {
   return {
-    news: state.news
+    news: state.news,
+    loading: state.loading
   };
 }
 
 class App extends Component {
   render(){
-    const {dispatch,news}=this.props;
+    const {dispatch,news,loading}=this.props;
     return (
         <div>
-          <NewsBar onRefrashClick={()=>dispatch(refreshNewsListAsync())} />
+          <NewsBar loading={loading} onRefrashClick={()=>dispatch(refreshNewsListAsync())} />
           <NewsList news={news}/>
         </div>
     );
